@@ -92,7 +92,17 @@ class TinyHtmlMinifier {
             $this->setSkip($name, $type);
 
             if(!empty($tag_content)) {
-                $content = (isset($tag_parts[1])) ? $tag_parts[1] : '';
+                
+                $content = '';
+
+                if(isset($tag_parts[1])) :
+                    unset($tag_parts[0]);
+                    
+                    //if there were > tags somewhere outside of an html tag, this will put them back.
+                    $content = implode('>', $tag_parts);
+
+                endif;
+                
                 if($content !== '') {
                     $this->build[] = [
                         'content' => $this->compact($content, $name, $element),
